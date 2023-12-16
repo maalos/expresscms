@@ -1,0 +1,92 @@
+button {
+    cursor: pointer;
+}
+
+* {
+    user-select: none;
+}
+
+#content-textarea {
+    width: calc(100% - 20px);
+    resize: none;
+}
+
+form[action^="/edit-post/"] {
+    width: 60%;
+    float: left;
+}
+
+#post-editor-preview {
+    width: calc(40% - 22px);
+    float: right;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+    min-height: 12px;
+}
+
+#post-preview-corner-text {
+    position: absolute;
+    top: -20px;
+    right: 0px;
+    color: #0c0;
+    margin: 0;
+    font-size: 12px;
+    user-select: none;
+    z-index: 100;
+}
+
+textarea, input, button {
+    background-color: #181818;
+    color: #ccc;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+input:-webkit-autofill
+/* input:-webkit-autofill:hover, */
+/* input:-webkit-autofill:focus, */
+/* textarea:-webkit-autofill, */
+/* textarea:-webkit-autofill:hover, */
+/* textarea:-webkit-autofill:focus, */
+/* select:-webkit-autofill, */
+/* select:-webkit-autofill:hover, */
+/* select:-webkit-autofill:focus, */
+{
+  -webkit-text-fill-color: #ccc;
+  -webkit-box-shadow: 0 0 0px 1000px #181818 inset;
+}
+
+button {
+    cursor: pointer;
+}
+
+#content {
+    position: relative;
+}
+
+#tag-panel {
+    position: absolute;
+    bottom: 6px;
+    left: 2px;
+    right: 2px;
+}
+
+@media only screen and (max-width: 768px) {
+    form[action^="/edit-post/"] {
+        width: 100%;
+        float: unset;
+    }
+
+    #content-textarea {
+        width: calc(100% - 12px);
+    }
+
+    #post-editor-preview {
+        margin: 20px 0;
+        width: unset;
+        float: unset;
+    }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="SimpleCMS testing website">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="maalos">
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
+    <link rel="stylesheet" type="text/css" href="/styles/admin-style.css">
+</head>
+
+<body>
+    <nav>
+        <p><a href="/">Home</a> &raquo; Dashboard</p>
+    </nav>
+
+    <h1>SimpleCMS</h1>
+    <h2>Dashboard</h2>
+
+    <a href="/add-post">Add Post</a>
+    <br><br>
+
+    <% if (!posts.length) { %>
+        <p class="message">No posts.</p>
+        <% } else { %>
+            <div class="posts-index">
+                <% posts.slice().reverse().forEach((post, index)=> { %>
+                    <% index = posts.length - 1 - index %>
+                    <div class="post">
+                        <h3>
+                            <q><%= post.title %></q>
+                        </h3>
+                        <p>
+                            <%= post.content.replaceAll("\r", "").replaceAll("\n", "").substring(0, 1024) + ((post.content.replaceAll("\r", "").replaceAll("\n", "<br>").length > 512) ? " [...]" : "") %>
+                        </p>
+                        <a href="/edit-post/<%= index %>">Edit</a>
+                        <a href="#" <%- 'onclick="confirmDelete(' + index + ')"' %>>Delete</a>
+                        <a href="/posts/<%= index %>">View</a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    <script src="/scripts/post-utils.js" defer></script>
+</body>
+
+</html>

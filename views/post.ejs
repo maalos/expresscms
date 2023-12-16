@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="SimpleCMS testing website">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="maalos">
+
+    <title>Post</title>
+
+    <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
+</head>
+
+<body>
+    <nav>
+        <p><a href="/">Home</a> &raquo; <a href="/posts">Posts</a> &raquo; <%= postId %></p>
+        <p>
+            <% if (user) { %>
+                <a href="/logout" id="logout"><%= user.username %> (Log out)</a>
+                <% if (user.isAdmin == true) { %>
+                    <a href="/dashboard" id="dashboard">Dashboard</a>
+                <% } %>
+            <% } else { %>
+                <a href="/login" id="logout">Guest (Log in)</a>
+            <% } %>
+        </p>
+    </nav>
+    <h1>SimpleCMS</h1>
+    <h2>Post view</h2>
+    <div id="post-content" class="dark-page-content">
+        <h3 id="post-header" class="dark-page-header">
+            <q><%= post.title %></q>
+        </h3>    
+        <%- post.content.replaceAll("\r", "").replaceAll("\n", "") %>
+        <br><br>
+        <i>Post written by <%- (post.author) ? "<u>" + post.author + "</u>" : "an unknown character." %></i>
+    </div>
+    <% if (user && user.isAdmin == true) { %>
+        <a href="/edit-post/<%= postId %>">Edit</a>
+        <a href="#" <%- 'onclick="confirmDelete(' + postId + ')"' %>>Delete</a>
+    <% } %>
+    <script src="/scripts/post-utils.js" defer></script>
+</body>
+
+</html>
