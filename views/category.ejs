@@ -10,14 +10,14 @@
     <meta name="keywords" content="HTML, CSS, JavaScript">
     <meta name="author" content="maalos">
 
-    <title>Post</title>
-
+    <title>Category</title>
+    
     <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
 </head>
 
 <body>
     <nav>
-        <p><a href="/">Home</a> &raquo; <a href="/posts">Posts</a> &raquo; <%= postId %></p>
+        <p><a href="/">Home</a> &raquo; <a href="/categories">Categories</a> &raquo; <%= categoryId %></p>
         <p>
             <% if (user) { %>
                 <a href="/logout" id="logout"><%= user.username %> (Log out)</a>
@@ -29,22 +29,26 @@
             <% } %>
         </p>
     </nav>
+
     <h1>SimpleCMS</h1>
-    <h2>Post view</h2>
-    <div id="post-content" class="dark-page-content">
-        <h3 id="post-header" class="center">
-            <q><%= post.title %></q>
-        </h3>    
-        <%- post.content.replaceAll("\r", "").replaceAll("\n", "") %>
-        <br><br>
-        <i>Post written by <%- (post.author) ? "<u>" + post.author + "</u>" : "an unknown character." %></i><br>
-        <i>Category: <%- categories[(categories[post.categoryId]) ? post.categoryId : 0].name %></i>
-    </div>
-    <% if (user && user.isAdmin == true) { %>
-    <a href="/edit-post/<%= postId %>">Edit</a>
-    <a href="#" <%- `onclick="confirmDelete(${postId}, 'post')"` %>>Delete</a>
+    <h2>Category</h2>
+    <h3>
+        <q><%= category.name %></q>
+    </h3>
+    <p>
+        ID: <%= category.id %>
+    </p>
+    <h4>Posts:</h4>
+    <% if (posts.some(post => post.categoryId == category.id)) { %>
+    <ul>
+    <% posts.forEach((post, index) => { if (post.categoryId == category.id) { %>
+        <li><a href="/posts/<%= index %>"><%= post.title %></a></li>
+    <% }}) %>
+    </ul>
+    <% } else { %>
+    <p class="message">No posts.</p>
     <% } %>
-    <script src="/scripts/utils.js" defer></script>
+    
 </body>
 
 </html>

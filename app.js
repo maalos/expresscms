@@ -41,10 +41,27 @@ let users = [ // gets replaced if the users file exists
     }
 ];
 
-let posts = [];
+let posts = [
+    {
+        "title": "Loading posts...",
+        "content": "",
+        "categoryId": "0"
+    },
+];
+
+let categories = [
+    {
+        "id": 0,
+        "name": "Uncategorised"
+    },
+];
 
 if (fs.existsSync('data/users.json')) {
     users = JSON.parse(fs.readFileSync('data/users.json', 'utf8'));
+}
+
+if (fs.existsSync('data/categories.json')) {
+    categories = JSON.parse(fs.readFileSync('data/categories.json', 'utf8'))
 }
 
 if (fs.existsSync('data/posts.json')) {
@@ -57,7 +74,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    const user = users.find(u => u.username === username && u.password === sha256(password));
+    const user = users.find(u => u.username == username && u.password == sha256(password));
 
     if (user) {
         req.session.user = user;
@@ -73,7 +90,7 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
-    const user = users.find(u => u.username === username);
+    const user = users.find(u => u.username == username);
 
     if (!user) {
         req.session.user = { username: username, password: sha256(password), isAdmin: false };
@@ -87,14 +104,31 @@ app.post('/register', (req, res) => {
 
 
 app.get('/dashboard', isAuthorized, (req, res) => {
-    res.render('dashboard', { posts });
+    res.render('dashboard', { categories, posts, users });
 });
 
 app.get('/add-post', isAuthorized, (req, res) => {
-    const newPost = { title: "New post", content: "New post's content", author: req.session.user.username, createdAt: Date.now(), lastModifiedAt: Date.now() };
+    const newPostId = posts.length
+    const newPost = { title: "New post", content: "New post's content", categoryId: 0, author: req.session.user.username, createdAt: Date.now(), lastModifiedAt: Date.now() };
     posts.push(newPost);
     fs.writeFileSync('data/posts.json', JSON.stringify(posts, null, 2));
-    res.redirect('/edit-post/' + (posts.length - 1));
+    res.redirect('/edit-post/' + newPostId);
+});
+
+app.get('/add-category', isAuthorized, (req, res) => {
+    const newCategoryId = categories.length
+    const newCategory = { id: newCategoryId, title: "New category" };
+    categories.push(newCategory);
+    fs.writeFileSync('data/categories.json', JSON.stringify(categories, null, 2));
+    res.redirect('/edit-category/' + newCategoryId);
+});
+
+app.get('/add-user', isAuthorized, (req, res) => {
+    const newUserId = users.length
+    const newUser = { username: "New user #" + newUserId, password: sha256(Date.now().toString()), isAdmin: false };
+    users.push(newUser);
+    fs.writeFileSync('data/users.json', JSON.stringify(users, null, 2));
+    res.redirect('/edit-user/' + newUserId);
 });
 
 app.get('/edit-post/:id', isAuthorized, (req, res) => {
@@ -104,14 +138,50 @@ app.get('/edit-post/:id', isAuthorized, (req, res) => {
         return res.render('error', { errorCode: "404", errorMessage: "Post not found." });
     }
 
-    res.render('edit-post', { post, postId });
+    res.render('edit-post', { post, postId, categories });
 });
 
 app.post('/edit-post/:id', isAuthorized, (req, res) => {
     const postId = req.params.id;
-    const { title, content, author } = req.body;
-    posts[postId] = { title: title, content: content, author: author, createdAt: posts[postId].createdAt, lastModifiedAt: Date.now() };
+    const { title, content, categoryId, author } = req.body;
+    posts[postId] = { title: title, content: content, categoryId: categoryId, author: author, createdAt: posts[postId].createdAt, lastModifiedAt: Date.now() };
     fs.writeFileSync('data/posts.json', JSON.stringify(posts, null, 2));
+    res.redirect('/dashboard');
+});
+
+app.get('/edit-category/:id', isAuthorized, (req, res) => {
+    const categoryId = req.params.id;
+    const category = categories[categoryId];
+    if (!category) {
+        return res.render('error', { errorCode: "404", errorMessage: "Category not found." });
+    }
+
+    res.render('edit-category', { category, categoryId });
+});
+
+app.post('/edit-category/:id', isAuthorized, (req, res) => {
+    const categoryId = req.params.id;
+    const { name } = req.body;
+    categories[categoryId] = { id: categoryId, name: name };
+    fs.writeFileSync('data/categories.json', JSON.stringify(categories, null, 2));
+    res.redirect('/dashboard');
+});
+
+app.get('/edit-user/:id', isAuthorized, (req, res) => {
+    const userId = req.params.id;
+    const user = users[userId];
+    if (!user) {
+        return res.render('error', { errorCode: "404", errorMessage: "User not found." });
+    }
+
+    res.render('edit-user', { user, userId });
+});
+
+app.post('/edit-user/:id', isAuthorized, (req, res) => {
+    const userId = req.params.id;
+    const { username, password, isAdmin } = req.body;
+    users[userId] = { username, password, isAdmin };
+    fs.writeFileSync('data/users.json', JSON.stringify(users, null, 2));
     res.redirect('/dashboard');
 });
 
@@ -126,17 +196,43 @@ app.get('/delete-post/:id', isAuthorized, (req, res) => {
     res.redirect('/dashboard');
 });
 
+app.get('/delete-category/:id', isAuthorized, (req, res) => {
+    const categoryId = req.params.id;
+    if (!categories[categoryId]) {
+        return res.render('error', { errorCode: "404", errorMessage: "Category not found." });
+    }
+
+    categories.splice(categoryId, 1);
+    fs.writeFileSync('data/categories.json', JSON.stringify(categories, null, 2));
+    res.redirect('/dashboard');
+});
+
+app.get('/delete-user/:id', isAuthorized, (req, res) => {
+    const userId = req.params.id;
+    if (!users[userId]) {
+        return res.render('error', { errorCode: "404", errorMessage: "User not found." });
+    }
+
+    users.splice(userId, 1);
+    fs.writeFileSync('data/users.json', JSON.stringify(users, null, 2));
+    res.redirect('/dashboard');
+});
+
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 });
 
 app.get('/', (req, res) => {
-    res.render('posts-index', { posts: posts, user: req.session.user });
+    res.render('home', { categories: categories, posts: posts, user: req.session.user });
 });
 
 app.get('/posts', (req, res) => {
-    res.redirect("/");
+    res.render('posts-index', { categories: categories, posts: posts, user: req.session.user });
+});
+
+app.get('/categories', (req, res) => {
+    res.render('categories-index', { categories: categories, posts: posts, user: req.session.user });
 });
 
 app.get('/posts/:id', (req, res) => {
@@ -145,7 +241,16 @@ app.get('/posts/:id', (req, res) => {
         return res.render('error', { errorCode: "404", errorMessage: "Post not found." });
     }
 
-    res.render('post', { postId: postId, post: posts[postId], user: req.session.user });
+    res.render('post', { postId: postId, post: posts[postId], user: req.session.user, categories: categories });
+});
+
+app.get('/categories/:id', (req, res) => {
+    const categoryId = req.params.id;
+    if (!categories[categoryId]) {
+        return res.render('error', { errorCode: "404", errorMessage: "Category not found." });
+    }
+
+    res.render('category', { categoryId: categoryId, category: categories[categoryId], user: req.session.user, posts: posts });
 });
 
 const PORT = process.env.PORT || 3000;

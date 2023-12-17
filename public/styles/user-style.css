@@ -15,12 +15,23 @@ h1, h2, h3, h4, h5, h6 {
     color: #ccc;
 }
 
-.post {
+.post, .category, .user {
     margin-bottom: 20px;
     border: 1px solid #222;
     padding: 10px;
     border-radius: 5px;
     overflow: clip;
+    width: 100%;
+}
+
+.post > a, .category > a, .user > a {
+    float: right;
+    margin-left: 20px;
+}
+
+.posts-index, .categories-index, .users-index {
+    display: flex;
+    flex-wrap: wrap-reverse;
 }
 
 .message, a {
@@ -44,13 +55,14 @@ img {
     max-height: 400px;
 }
 
-.post-preview {
+.post-preview, .category-preview {
     text-decoration: none;
     color: #aaa;
     cursor: pointer;
+    max-height: 250px;
 }
 
-.dark-page-header {
+.center {
     text-align: center;
 }
 
@@ -62,4 +74,29 @@ img {
     background-color: #191919;
     padding: 20px;
     border-radius: 25px;
+}
+
+#container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.container-child {
+    width: calc(75% - 10px);
+}
+
+.container-child:nth-of-type(2) {
+    width: calc(25% - 10px);
+    margin-left: 20px;
+}
+
+@media only screen and (max-width: 768px) {
+    .dark-page-content {
+        padding: unset;
+    }
+
+    .container-child {
+        width: 100% !important;
+        margin: 0 !important;
+    }
 }

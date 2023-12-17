@@ -10,7 +10,7 @@
     <meta name="keywords" content="HTML, CSS, JavaScript">
     <meta name="author" content="maalos">
 
-    <title>Edit Post</title>
+    <title>Edit post</title>
 
     <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
     <link rel="stylesheet" type="text/css" href="/styles/admin-style.css">
@@ -30,6 +30,14 @@
         <label for="title">Title:</label>
         <br>
         <input type="text" id="title" name="title" value="<%= post.title %>" required>
+        <br>
+        <label for="categoryId">Category:</label>
+        <br>
+        <select name="categoryId" id="categoryId" required>
+        <% categories.forEach((category, categoryId) => { %>
+            <option value="<%= categoryId %>" <% if (categoryId == post.categoryId) { %>selected<% } %>><%= category.name %></option>
+        <% }) %>
+        </select>        
         <br>
         <label for="author">Author:</label>
         <br>
