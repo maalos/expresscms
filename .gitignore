@@ -8,3 +8,6 @@ data/categories.json
 
 data/server.cert
 data/server.key
+
+public/images/posts/*.webp
+public/images/posts/tmp/*

@@ -49,23 +49,25 @@
         <div id="content">
             <textarea id="content-textarea" name="content" rows="30" required><%= post.content %></textarea>
             <div id="tag-panel">
-                <button onclick="iT(this, event)">b</button>
-                <button onclick="iT(this, event)">i</button>
-                <button onclick="iT(this, event)">u</button>
-                <button onclick="iT(this, event)">s</button>
-                <button onclick="iT(this, event)">ul</button>
-                <button onclick="iT(this, event)">ol</button>
-                <button onclick="iT(this, event)">li</button>
-                <button onclick="iT(this, event)">br</button>
-                <button onclick="iT(this, event)">a</button>
-                <button onclick="iT(this, event)">img</button>
-                <button onclick="iT(this, event)">hr</button>
-                <button onclick="iT(this, event)">pre</button>
-                <button onclick="iT(this, event)">q</button>
-                <button onclick="iT(this, event)">sub</button>
-                <button onclick="iT(this, event)">sup</button>
+                <button onclick="insertTag(this, event)">b</button>
+                <button onclick="insertTag(this, event)">i</button>
+                <button onclick="insertTag(this, event)">u</button>
+                <button onclick="insertTag(this, event)">s</button>
+                <button onclick="insertTag(this, event)">ul</button>
+                <button onclick="insertTag(this, event)">ol</button>
+                <button onclick="insertTag(this, event)">li</button>
+                <button onclick="insertTag(this, event)">br</button>
+                <button onclick="insertTag(this, event)">a</button>
+                <button onclick="uploadImage(this, event)">img</button>
+                <button onclick="insertTag(this, event)">hr</button>
+                <button onclick="insertTag(this, event)">pre</button>
+                <button onclick="insertTag(this, event)">q</button>
+                <button onclick="insertTag(this, event)">sub</button>
+                <button onclick="insertTag(this, event)">sup</button>
             </div>
         </div>
+        <br>
+        <input type="file" id="imageButton" name="image" accept="image/*">
         <br>
         <br>
         <button type="submit">Save Changes</button>

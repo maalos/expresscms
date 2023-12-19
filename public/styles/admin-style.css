@@ -69,9 +69,13 @@ button {
 
 #tag-panel {
     position: absolute;
-    bottom: 6px;
-    left: 2px;
-    right: 2px;
+    bottom: -25px;
+    left: 0;
+    right: 0;
+}
+
+#imageButton {
+    visibility: hidden;
 }
 
 #container {
