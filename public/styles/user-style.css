@@ -51,8 +51,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 img {
-    /* max-width: 400px; */
-    /* max-height: 400px; */
+    max-width: 800px;
+    height: auto;
 }
 
 .post-preview, .category-preview {
@@ -98,5 +98,9 @@ img {
     .container-child {
         width: 100% !important;
         margin: 0 !important;
+    }
+
+    img {
+        max-width: calc(100vw - 40px);
     }
 }
