@@ -55,7 +55,7 @@ let categories = readJSONFile('data/categories.json', [{
 require("./routes/general")(app, isAuthorized, categories, posts, users, sha256);
 require("./routes/posts")(app, fs, isAuthorized, categories, posts);
 require("./routes/users")(app, fs, isAuthorized, users, sha256);
-require("./routes/media")(app, fs, upload, exec, sizeOf);
+require("./routes/media")(app, fs, isAuthorized, upload, exec, sizeOf);
 require("./routes/categories")(app, fs, isAuthorized, categories, posts);
 
 const PORT = process.env.PORT || 3000;

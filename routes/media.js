@@ -1,5 +1,5 @@
-module.exports = function(app, fs, upload, exec, sizeOf) {
-    app.post('/upload-image', upload.single('image'), (req, res) => {
+module.exports = function(app, fs, isAuthorized, upload, exec, sizeOf) {
+    app.post('/upload-image', isAuthorized, upload.single('image'), (req, res) => {
         if (!req.file) {
             return res.status(400).json({ error: 'No image file provided.' });
         }
