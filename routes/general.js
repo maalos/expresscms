@@ -1,10 +1,34 @@
-module.exports = function(app, isAuthorized, categories, posts, users, sha256) {
+module.exports = function(app, isAuthorized, categories, posts, users, sha256, generateBreadcrumbs, generateLoginText) {
     app.get('/', (req, res) => {
-        res.render('home', { categories: categories, posts: posts, user: req.session.user });
+        res.render('generic', {
+            breadcrumbs: generateBreadcrumbs(req),
+                logintext: generateLoginText(req),
+                dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
+
+            pageTitle: 'Homepage',
+            pageCategory: 'Homepage',
+            contentModule: 'home',
+            
+            categories,
+            posts,
+            user: req.session.user
+        });
     });
 
     app.get('/login', (req, res) => {
-        res.render('login');
+        res.render('generic', {
+            breadcrumbs: generateBreadcrumbs(req),
+            logintext: ``,
+            dashboardtext: ``,
+
+            pageTitle: 'Log in',
+            pageCategory: 'Log in',
+            contentModule: 'login',
+            
+            categories,
+            posts,
+            users
+        });
     });
     
     app.post('/login', (req, res) => {
@@ -25,7 +49,19 @@ module.exports = function(app, isAuthorized, categories, posts, users, sha256) {
     });
     
     app.get('/register', (req, res) => {
-        res.render('register');
+        res.render('generic', {
+            breadcrumbs: generateBreadcrumbs(req),
+            logintext: ``,
+            dashboardtext: ``,
+
+            pageTitle: 'Register',
+            pageCategory: 'Register',
+            contentModule: 'register',
+            
+            categories,
+            posts,
+            users
+        });
     });
     
     app.post('/register', (req, res) => {
@@ -43,6 +79,18 @@ module.exports = function(app, isAuthorized, categories, posts, users, sha256) {
     });
 
     app.get('/dashboard', isAuthorized, (req, res) => {
-        res.render('dashboard', { categories, posts, users });
+        res.render('generic', {
+            breadcrumbs: generateBreadcrumbs(req),
+            logintext: generateLoginText(req),
+            dashboardtext: ``,
+
+            pageTitle: 'Dashboard',
+            pageCategory: 'Dashboard',
+            contentModule: 'dashboard',
+            
+            categories,
+            posts,
+            users
+        });
     });
 }

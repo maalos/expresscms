@@ -1,48 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description" content="ExpressCMS testing website">
-    <meta name="keywords" content="HTML, CSS, JavaScript">
-    <meta name="author" content="maalos">
-
-    <title>Edit user</title>
-
-    <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
-    <link rel="stylesheet" type="text/css" href="/styles/admin-style.css">
-</head>
-
-<body>
-    <nav>
-        <p><a href="/">Home</a> &raquo; <a href="/dashboard">Dashboard</a> &raquo; Edit user</p>
-    </nav>
-
-    <h1>ExpressCMS</h1>
-    <h2>Edit user</h2>
-
-    <form action="/edit-user/<%= userId %>" method="post">
-        <label for="username">Username:</label>
-        <br>
-        <input type="text" id="username" name="username" value="<%= user.username %>" required>
-        <br>
-        <label for="password">Password hash:</label>
-        <br>
-        <input type="text" id="password" name="password" value="<%= user.password %>" required>
-        <br>
-        <label for="isAdmin">Role:</label>
-        <br>
-        <select name="isAdmin" id="isAdmin">
-            <option value="false">User</option>
-            <option value="true">Administrator</option>
-        </select>
-        <br>
-        <br>
-        <button type="submit">Save Changes</button>
-    </form>
-</body>
-
-</html>
+<form action="<%= formAction %>" method="post">
+    <label for="username">Username:</label>
+    <br>
+    <input type="text" id="username" name="username" value="<%= user.username %>" required>
+    <br>
+    <label for="password">Password hash:</label>
+    <br>
+    <input type="text" id="password" name="password" value="<%= user.password %>" required>
+    <br>
+    <label for="isAdmin">Role:</label>
+    <br>
+    <select name="isAdmin" id="isAdmin">
+        <option value="false">User</option>
+        <option value="true">Administrator</option>
+    </select>
+    <br>
+    <br>
+    <button type="submit">Save Changes</button>
+</form>

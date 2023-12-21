@@ -1,54 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description" content="ExpressCMS testing website">
-    <meta name="keywords" content="HTML, CSS, JavaScript">
-    <meta name="author" content="maalos">
-
-    <title>Category</title>
-    
-    <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
-</head>
-
-<body>
-    <nav>
-        <p><a href="/">Home</a> &raquo; <a href="/categories">Categories</a> &raquo; <%= categoryId %></p>
-        <p>
-            <% if (user) { %>
-                <a href="/logout" id="logout"><%= user.username %> (Log out)</a>
-                <% if (user.isAdmin == true) { %>
-                    <a href="/dashboard" id="dashboard">Dashboard</a>
-                <% } %>
-            <% } else { %>
-                <a href="/login" id="logout">Guest (Log in)</a>
-            <% } %>
-        </p>
-    </nav>
-
-    <h1>ExpressCMS</h1>
-    <h2>Category</h2>
-    <h3>
-        <q><%= category.name %></q>
-    </h3>
-    <p>
-        ID: <%= category.id %>
-    </p>
-    <h4>Posts:</h4>
-    <% if (posts.some(post => post.categoryId == category.id)) { %>
-    <ul>
-    <% posts.forEach((post, index) => { if (post.categoryId == category.id) { %>
-        <li><a href="/posts/<%= index %>"><%= post.title %></a></li>
-    <% }}) %>
-    </ul>
-    <% } else { %>
-    <p class="message">No posts.</p>
-    <% } %>
-    
-</body>
-
-</html>
+<h3>
+    <q><%= category.name %></q>
+</h3>
+<p>
+    ID: <%= category.id %>
+</p>
+<h4>Posts:</h4>
+<% if (posts.some(post => post.categoryId == category.id)) { %>
+<ul>
+<% posts.forEach((post, index) => { if (post.categoryId == category.id) { %>
+    <li><a href="/posts/<%= index %>"><%= post.title %></a></li>
+<% }}) %>
+</ul>
+<% } else { %>
+<p class="message">No posts.</p>
+<% } %>

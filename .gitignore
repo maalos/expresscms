@@ -1,13 +1,9 @@
 node_modules/
 
 package-lock.json
+.env
 
-data/users.json
-data/posts.json
-data/categories.json
-
-data/server.cert
-data/server.key
+data/*
 
 public/images/posts/*.webp
 public/images/posts/tmp/*

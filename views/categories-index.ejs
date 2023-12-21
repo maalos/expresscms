@@ -1,56 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description" content="ExpressCMS testing website">
-    <meta name="keywords" content="HTML, CSS, JavaScript">
-    <meta name="author" content="maalos">
-
-    <title>All categories</title>
-    
-    <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
-</head>
-
-<body>
-    <nav>
-        <p><a href="/">Home</a> &raquo; Categories</p>
-        <p>
-            <% if (user) { %>
-                <a href="/logout" id="logout"><%= user.username %> (Log out)</a>
-                <% if (user.isAdmin == true) { %>
-                    <a href="/dashboard" id="dashboard">Dashboard</a>
-                <% } %>
-            <% } else { %>
-                <a href="/login" id="logout">Guest (Log in)</a>
-            <% } %>
-        </p>
-    </nav>
-
-    <h1>ExpressCMS</h1>
-    <h2>All categories</h2>
-
-    <% if (!categories.length) { %>
-        <p class="message">
-            No categories.
-        </p>
-    <% } else { %>
-        <div class="categories-index">
-            <% categories.forEach((category, index) => { %>
-                <div class="category-preview category" onclick="location.href='/categories/<%= index %>'">
-                    <h3>
-                        <q><%= category.name %></q>
-                    </h3>
-                    <p>
-                        ID: <%= category.id %>
-                    </p>
-                </div>
-            <% }); %>
-        </div>
-    <% } %>
-</body>
-
-</html>
+<% if (!categories.length) { %>
+    <p class="message">
+        No categories.
+    </p>
+<% } else { %>
+    <div class="categories-index">
+        <% categories.forEach((category, index) => { %>
+            <div class="category-preview category" onclick="location.href='/categories/<%= index %>'">
+                <h3>
+                    <q><%= category.name %></q>
+                </h3>
+                <p>
+                    ID: <%= category.id %>
+                </p>
+            </div>
+        <% }); %>
+    </div>
+<% } %>

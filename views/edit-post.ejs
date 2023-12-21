@@ -1,79 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
+<div id="post-editor-preview"></div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description" content="ExpressCMS testing website">
-    <meta name="keywords" content="HTML, CSS, JavaScript">
-    <meta name="author" content="maalos">
-
-    <title>Edit post</title>
-
-    <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
-    <link rel="stylesheet" type="text/css" href="/styles/admin-style.css">
-</head>
-
-<body>
-    <nav>
-        <p><a href="/">Home</a> &raquo; <a href="/dashboard">Dashboard</a> &raquo; Edit Post</p>
-    </nav>
-
-    <h1>ExpressCMS</h1>
-    <h2>Edit post</h2>
-
-    <div id="post-editor-preview"></div>
-
-    <form action="/edit-post/<%= postId %>" method="post">
-        <label for="title">Title:</label>
-        <br>
-        <input type="text" id="title" name="title" value="<%= post.title %>" required>
-        <br>
-        <label for="categoryId">Category:</label>
-        <br>
-        <select name="categoryId" id="categoryId" required>
-        <% categories.forEach((category, categoryId) => { %>
-            <option value="<%= categoryId %>" <% if (categoryId == post.categoryId) { %>selected<% } %>><%= category.name %></option>
-        <% }) %>
-        </select>        
-        <br>
-        <label for="author">Author:</label>
-        <br>
-        <input type="text" id="author" name="author" value="<%= post.author %>" required>
-        <br>
-        <br>
-        <label for="content-textarea">Content:</label>
-        <br>
-        <div id="content">
-            <textarea id="content-textarea" name="content" rows="30" required><%= post.content %></textarea>
-            <div id="tag-panel">
-                <button onclick="insertTag(this, event)">b</button>
-                <button onclick="insertTag(this, event)">i</button>
-                <button onclick="insertTag(this, event)">u</button>
-                <button onclick="insertTag(this, event)">s</button>
-                <button onclick="insertTag(this, event)">ul</button>
-                <button onclick="insertTag(this, event)">ol</button>
-                <button onclick="insertTag(this, event)">li</button>
-                <button onclick="insertTag(this, event)">br</button>
-                <button onclick="insertTag(this, event)">a</button>
-                <button onclick="uploadImage(this, event)">img</button>
-                <button onclick="insertTag(this, event)">hr</button>
-                <button onclick="insertTag(this, event)">pre</button>
-                <button onclick="insertTag(this, event)">q</button>
-                <button onclick="insertTag(this, event)">sub</button>
-                <button onclick="insertTag(this, event)">sup</button>
-            </div>
+<form action="<%= formAction %>" method="post">
+    <label for="title">Title:</label>
+    <br>
+    <input type="text" id="title" name="title" value="<%= post.title %>" required>
+    <br>
+    <label for="categoryId">Category:</label>
+    <br>
+    <select name="categoryId" id="categoryId" required>
+    <% categories.forEach((category, categoryId) => { %>
+        <option value="<%= categoryId %>" <% if (categoryId == post.categoryId) { %>selected<% } %>><%= category.name %></option>
+    <% }) %>
+    </select>        
+    <br>
+    <label for="author">Author:</label>
+    <br>
+    <input type="text" id="author" name="author" value="<%= post.author %>" required>
+    <br>
+    <br>
+    <label for="content-textarea">Content:</label>
+    <br>
+    <div id="content">
+        <textarea id="content-textarea" name="content" rows="30" required><%= post.content %></textarea>
+        <div id="tag-panel">
+            <button onclick="insertTag(this, event)">b</button>
+            <button onclick="insertTag(this, event)">i</button>
+            <button onclick="insertTag(this, event)">u</button>
+            <button onclick="insertTag(this, event)">s</button>
+            <button onclick="insertTag(this, event)">ul</button>
+            <button onclick="insertTag(this, event)">ol</button>
+            <button onclick="insertTag(this, event)">li</button>
+            <button onclick="insertTag(this, event)">br</button>
+            <button onclick="insertTag(this, event)">a</button>
+            <button onclick="uploadImage(this, event)">img</button>
+            <button onclick="insertTag(this, event)">hr</button>
+            <button onclick="insertTag(this, event)">pre</button>
+            <button onclick="insertTag(this, event)">q</button>
+            <button onclick="insertTag(this, event)">sub</button>
+            <button onclick="insertTag(this, event)">sup</button>
         </div>
-        <br>
-        <input type="file" id="imageButton" name="image" accept="image/*">
-        <br>
-        <br>
-        <button type="submit">Save Changes</button>
-    </form>
-
-    <script src="/scripts/editor.js" defer></script>
-</body>
-
-</html>
+    </div>
+    <br>
+    <input type="file" id="imageButton" name="image" accept="image/*">
+    <br>
+    <br>
+    <button type="submit">Save Changes</button>
+</form>
+<script src="/scripts/editor.js" defer></script>
