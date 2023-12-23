@@ -1,0 +1,17 @@
+<% if (!categories.length) { %>
+    <p>No categories.</p>
+<% } else { %>
+    <% categories.forEach((category, index) => { %>
+        <article class="preview category" onclick="location.href='/categories/<%= index %>'">
+            <h3>
+                <a href="/categories/<%= index %>"><q><%= (!category.name || category.name == "") ? "Untitled category" : category.name %></q></a>
+            </h3>
+            <p>
+                ID: <%= category.id %>
+            </p>
+        </article>
+        <% if (index + 1 != categories.length) { // last category shouldn't have the hr %>
+            <hr class="border-dashed">
+        <% } %>
+    <% }); %>
+<% } %>

@@ -1,12 +1,9 @@
-module.exports = function(app, isAuthorized, categories, posts, users, sha256, generateBreadcrumbs, generateLoginText) {
+module.exports = function(app, isAdmin, categories, posts, users, sha256, generateNav) {
     app.get('/', (req, res) => {
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-                logintext: generateLoginText(req),
-                dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
+            ...generateNav(req),
 
             pageTitle: 'Homepage',
-            pageCategory: 'Homepage',
             contentModule: 'home',
             
             categories,
@@ -17,12 +14,9 @@ module.exports = function(app, isAuthorized, categories, posts, users, sha256, g
 
     app.get('/login', (req, res) => {
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: ``,
-            dashboardtext: ``,
+            ...generateNav(req),
 
             pageTitle: 'Log in',
-            pageCategory: 'Log in',
             contentModule: 'login',
             
             categories,
@@ -39,7 +33,7 @@ module.exports = function(app, isAuthorized, categories, posts, users, sha256, g
             req.session.user = user;
             res.redirect('/');
         } else {
-            res.redirect('/login');
+            res.redirect('/login?err=1');
         }
     });
 
@@ -50,12 +44,9 @@ module.exports = function(app, isAuthorized, categories, posts, users, sha256, g
     
     app.get('/register', (req, res) => {
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: ``,
-            dashboardtext: ``,
+            ...generateNav(req),
 
             pageTitle: 'Register',
-            pageCategory: 'Register',
             contentModule: 'register',
             
             categories,
@@ -74,18 +65,15 @@ module.exports = function(app, isAuthorized, categories, posts, users, sha256, g
             fs.writeFileSync('data/users.json', JSON.stringify(users, null, 4));
             res.redirect('/');
         } else {
-            res.redirect('/register');
+            res.redirect('/register?err=1');
         }
     });
 
-    app.get('/dashboard', isAuthorized, (req, res) => {
+    app.get('/dashboard', isAdmin, (req, res) => {
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: generateLoginText(req),
-            dashboardtext: ``,
+            ...generateNav(req),
 
             pageTitle: 'Dashboard',
-            pageCategory: 'Dashboard',
             contentModule: 'dashboard',
             
             categories,

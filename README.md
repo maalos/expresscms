@@ -15,7 +15,6 @@ ExpressCMS is a lightweight, fast, minimal and secure Content Management System 
 `node .`
 
 ## TODO
-- simplify DOM structure
 - template theming support 
 
 ## Lighthouse/Page Speed Index results:

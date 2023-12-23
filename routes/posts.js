@@ -1,26 +1,22 @@
-module.exports = function(app, fs, isAuthorized, categories, posts, generateBreadcrumbs, generateLoginText) {
-    const postNotFoundErrorObject = {
-        breadcrumbs: ``,
-        logintext: ``,
-        dashboardtext: ``,
+module.exports = function(app, fs, isAdmin, categories, posts, users, generateNav) {
+    function postNotFoundErrorObject(req) {
+            return {
+            ...generateNav(req),
 
-        pageTitle: 'Error',
-        pageCategory: 'Error',
-        contentModule: 'error',
-        
-        errorCode: "404",
-        errorMessage: "Post not found."
+            pageTitle: 'Error',
+            contentModule: 'error',
+            
+            errorCode: "404",
+            errorMessage: "Post not found."
+        }
     }
 
     app.get('/posts', (req, res) => {
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: generateLoginText(req),
-            dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
+            ...generateNav(req),
 
             pageTitle: 'Posts index',
-            pageCategory: 'Posts index',
-            contentModule: 'posts-index',
+            contentModule: 'posts',
             
             categories,
             posts,
@@ -31,26 +27,24 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
     app.get('/posts/:id', (req, res) => {
         const postId = req.params.id;
         if (!posts[postId]) {
-            return res.render('generic', postNotFoundErrorObject);
+            return res.render('generic', postNotFoundErrorObject(req));
         }
     
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: generateLoginText(req),
-            dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
+            ...generateNav(req),
 
             pageTitle: 'Post',
-            pageCategory: 'Post',
             contentModule: 'post',
             
             postId,
             post: posts[postId],
             user: req.session.user,
+            users,
             categories
         });
     });
 
-    app.get('/posts/add', isAuthorized, (req, res) => {
+    app.get('/posts/add', isAdmin, (req, res) => {
         const newPostId = posts.length
         const newPost = { title: "New post", content: "New post's content", categoryId: 0, author: req.session.user.username, createdAt: Date.now(), lastModifiedAt: Date.now() };
         posts.push(newPost);
@@ -58,20 +52,17 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
         res.redirect(`/posts/${newPostId}/edit`);
     });
 
-    app.get('/posts/:id/edit', isAuthorized, (req, res) => {
+    app.get('/posts/:id/edit', isAdmin, (req, res) => {
         const postId = req.params.id;
         const post = posts[postId];
         if (!post) {
-            return res.render('generic', postNotFoundErrorObject);
+            return res.render('generic', postNotFoundErrorObject(req));
         }
     
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: generateLoginText(req),
-            dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
+            ...generateNav(req),
 
             pageTitle: 'Edit post',
-            pageCategory: 'Posts',
             contentModule: 'edit-post',
             
             post,
@@ -81,7 +72,7 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
         });
     });
 
-    app.post('/posts/:id/edit', isAuthorized, (req, res) => {
+    app.post('/posts/:id/edit', isAdmin, (req, res) => {
         const postId = req.params.id;
         const { title, content, categoryId, author } = req.body;
         posts[postId] = { title: title, content: content, categoryId: categoryId, author: author, createdAt: posts[postId].createdAt, lastModifiedAt: Date.now() };
@@ -89,10 +80,10 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
         res.redirect('/dashboard');
     });
 
-    app.get('/posts/:id/delete', isAuthorized, (req, res) => {
+    app.get('/posts/:id/delete', isAdmin, (req, res) => {
         const postId = req.params.id;
         if (!posts[postId]) {
-            return res.render('generic', postNotFoundErrorObject);
+            return res.render('generic', postNotFoundErrorObject(req));
         }
     
         posts.splice(postId, 1);

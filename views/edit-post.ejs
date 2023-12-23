@@ -1,9 +1,10 @@
-<div id="post-editor-preview"></div>
+<hr>
 
 <form action="<%= formAction %>" method="post">
     <label for="title">Title:</label>
     <br>
     <input type="text" id="title" name="title" value="<%= post.title %>" required>
+    <br>
     <br>
     <label for="categoryId">Category:</label>
     <br>
@@ -13,10 +14,13 @@
     <% }) %>
     </select>        
     <br>
+    <br>
     <label for="author">Author:</label>
     <br>
     <input type="text" id="author" name="author" value="<%= post.author %>" required>
     <br>
+    <br>
+    <section id="post-editor-preview"></section>
     <br>
     <label for="content-textarea">Content:</label>
     <br>
@@ -42,8 +46,6 @@
     </div>
     <br>
     <input type="file" id="imageButton" name="image" accept="image/*">
-    <br>
-    <br>
-    <button type="submit">Save Changes</button>
+    <button type="submit">Save changes</button>
 </form>
 <script src="/scripts/editor.js" defer></script>

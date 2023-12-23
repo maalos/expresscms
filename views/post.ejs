@@ -1,14 +1,16 @@
-<div id="post-content" class="dark-page-content">
-    <h3 id="post-header" class="center">
+<article>
+    <h3>
         <q><%= post.title %></q>
     </h3>    
     <%- post.content.replaceAll("\r", "").replaceAll("\n", "") %>
-    <br><br>
-    <i>Post written by <%- (post.author) ? "<u>" + post.author + "</u>" : "an unknown character." %></i><br>
+    <br>
+    <br>
+    <% function getUserIdFromName(name) { let returnVal; users.every((user, index) => { if (user.username == name) { returnVal = index }}); return returnVal } %>
+    <i>Post written by <%- (post.author) ? `<a href="/users/${getUserIdFromName(post.author)}">${post.author}</a>` : "an unknown character." %></i><br>
     <i>Category: <%- categories[(categories[post.categoryId]) ? post.categoryId : 0].name %></i>
-</div>
-<% if (user && user.isAdmin == true) { %>
-<a href="/posts/<%= postId %>/edit">Edit</a>
-<a href="#" <%- `onclick="confirmDelete(${postId}, 'post', 'posts')"` %>>Delete</a>
+</article>
+<% if (user && (user.isAdmin == true || user.isAdmin == "true")) { %>
+    <a href="/posts/<%= postId %>/edit">Edit</a>
+    <a href="#" <%- `onclick="confirmDelete(${postId}, 'post', 'posts')"` %>>Delete</a>
 <% } %>
 <script src="/scripts/utils.js" defer></script>

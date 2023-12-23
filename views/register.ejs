@@ -9,3 +9,7 @@
 </form>
 <br>
 <a href="/login">Log in</a>
+
+<script>
+    new URLSearchParams(window.location.search).get('err') ? document.write("<error>Error: User already exists!</error>") : undefined
+</script>

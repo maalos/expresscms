@@ -9,3 +9,7 @@
 </form>
 <br>
 <a href="/register">Register</a>
+
+<script>
+    new URLSearchParams(window.location.search).get('err') ? document.write("<error>Error: Incorrect user data</error>") : undefined
+</script>

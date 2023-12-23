@@ -1,6 +1,6 @@
 const previewWindow = document.getElementById("post-editor-preview")
 const textarea = document.getElementById("content-textarea")
-const previewHeader = "<p id=\"post-preview-corner-text\">Post preview</p>"
+const previewHeader = "<p id=\"preview-corner-text\">Post preview</p>"
 
 function updatePreviewWindow() {
     if (previewWindow.innerHTML != previewHeader + textarea.value.replaceAll("<img", "&lt;img"))
@@ -51,7 +51,6 @@ imageButton.addEventListener('change', function() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if (!data.error) {
                 const imgTag = `<img src="/images/posts/${data.imageName}.webp" alt="Uploaded Image" width="${data.width}" height="${data.height}" loading="lazy">`;
                 insertTag(undefined, undefined, imgTag);

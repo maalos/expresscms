@@ -1,0 +1,17 @@
+<% if (!posts.length) { %>
+    <p>No posts.</p>
+<% } else { %>
+    <% posts.forEach((post, index) => { %>
+        <article class="preview post" onclick="location.href='/posts/<%= index %>'">
+            <h3>
+                <a href="/posts/<%= index %>"><q><%= post.title %></q></a>
+            </h3>
+            <p>
+                <%- post.content.replaceAll("\r", "").replaceAll("\n", "") %>
+            </p>
+        </article>
+        <% if (index + 1 != posts.length) { // last post shouldn't have the hr %>
+            <hr class="border-dashed">
+        <% } %>
+    <% }); %>
+<% } %>

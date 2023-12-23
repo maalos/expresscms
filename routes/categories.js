@@ -1,26 +1,22 @@
-module.exports = function(app, fs, isAuthorized, categories, posts, generateBreadcrumbs, generateLoginText) {
-    const categoryNotFoundErrorObject = {
-        breadcrumbs: ``,
-        logintext: ``,
-        dashboardtext: ``,
+module.exports = function(app, fs, isAdmin, categories, posts, generateNav) {
+    function categoryNotFoundErrorObject(req) {
+        return {
+            ...generateNav(req),
 
-        pageTitle: 'Error',
-        pageCategory: 'Error',
-        contentModule: 'error',
-        
-        errorCode: "404",
-        errorMessage: "Category not found."
-    };
+            pageTitle: 'Error',
+            contentModule: 'error',
+            
+            errorCode: "404",
+            errorMessage: "Category not found."
+        }
+    }
 
     app.get('/categories', (req, res) => {
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: generateLoginText(req),
-            dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
+            ...generateNav(req),
 
             pageTitle: 'All categories',
-            pageCategory: 'All categories',
-            contentModule: 'categories-index',
+            contentModule: 'categories',
             
             categories,
             posts,
@@ -31,16 +27,13 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
     app.get('/categories/:id', (req, res) => {
         const categoryId = req.params.id;
         if (!categories[categoryId]) {
-            return res.render('generic', categoryNotFoundErrorObject);
+            return res.render('generic', categoryNotFoundErrorObject(req));
         }
     
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: generateLoginText(req),
-            dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
+            ...generateNav(req),
 
             pageTitle: 'Category',
-            pageCategory: 'Category',
             contentModule: 'category',
             
             categoryId,
@@ -50,7 +43,7 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
         });
     });
 
-    app.get('/categories/add', isAuthorized, (req, res) => {
+    app.get('/categories/add', isAdmin, (req, res) => {
         const newCategoryId = categories.length
         const newCategory = { id: newCategoryId, title: "New category" };
         categories.push(newCategory);
@@ -58,20 +51,17 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
         res.redirect(`/categories/${newCategoryId}/edit`);
     });
 
-    app.get('/categories/:id/edit', isAuthorized, (req, res) => {
+    app.get('/categories/:id/edit', isAdmin, (req, res) => {
         const categoryId = req.params.id;
         const category = categories[categoryId];
         if (!category) {
-            return res.render('generic', categoryNotFoundErrorObject);
+            return res.render('generic', categoryNotFoundErrorObject(req));
         }
     
         res.render('generic', {
-            breadcrumbs: generateBreadcrumbs(req),
-            logintext: generateLoginText(req),
-            dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
+            ...generateNav(req),
 
             pageTitle: 'Edit category',
-            pageCategory: 'Categories',
             contentModule: 'edit-category',
             
             category,
@@ -80,7 +70,7 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
         });
     });
     
-    app.post('/categories/:id/edit', isAuthorized, (req, res) => {
+    app.post('/categories/:id/edit', isAdmin, (req, res) => {
         const categoryId = req.params.id;
         const { name } = req.body;
         categories[categoryId] = { id: categoryId, name: name };
@@ -88,10 +78,10 @@ module.exports = function(app, fs, isAuthorized, categories, posts, generateBrea
         res.redirect('/dashboard');
     });
 
-    app.get('/categories/:id/delete', isAuthorized, (req, res) => {
+    app.get('/categories/:id/delete', isAdmin, (req, res) => {
         const categoryId = req.params.id;
         if (!categories[categoryId]) {
-            return res.render('generic', categoryNotFoundErrorObject);
+            return res.render('generic', categoryNotFoundErrorObject(req));
         }
     
         categories.splice(categoryId, 1);

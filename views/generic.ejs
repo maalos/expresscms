@@ -9,11 +9,13 @@
     <meta name="description" content="ExpressCMS testing website">
     <meta name="keywords" content="HTML, CSS, JavaScript">
     <meta name="author" content="maalos">
+    <meta name="theme-color" content="#000000">
 
     <title><%= pageTitle %></title>
 
     <link rel="stylesheet" type="text/css" href="/styles/user-style.css">
     <link rel="stylesheet" type="text/css" href="/styles/admin-style.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
 </head>
 
 <body>
@@ -21,18 +23,26 @@
         <h1>ExpressCMS</h1>
     </header>
 
+    <hr>
+
     <nav>
         <%- breadcrumbs %>
         <%- logintext %>
         <%- dashboardtext %>
     </nav>
 
-    <article>
-        <h2>
-            <%= pageTitle %>
-        </h2>
+    <hr>
+
+    <main>
+        <h2><%= pageTitle %></h2>
         <%- include(contentModule) -%>
-    </article>
+    </main>
+
+    <hr>
+
+    <footer>
+        ExpressCMS by maalos
+    </footer>
 </body>
 
 </html>

@@ -1,85 +1,84 @@
-<a href="/posts/add">Add post</a>
-<br>
-<br>
-<a href="/categories/add">Add category</a>
-<br>
-<br>
-<a href="/users/add">Add user</a>
-<br>
-<div id="container">
-    <div class="container-child">
-        <h3 class="center">All posts</h3>
-<% if (!posts.length) { %>
-    <p class="message">No posts.</p>
+<section id="dashboard-create">
+    <h3 class="flex-break center nomargin">Create a new...</h3>
+    <a href="/posts/add">Post</a>
+    <a href="/categories/add">Category</a>
+    <a href="/users/add">User</a>
+</section>
+<hr>
+<section>
+    <h3 class="center">All posts</h3>
+    <% if (!posts.length) { %>
+        <p>No posts.</p>
     <% } else { %>
-        <div class="posts-index">
-            <% posts.forEach((post, index)=> { %>
-                <div class="post">
-                    <h3>
-                        <q><%= post.title %></q>
-                    </h3>
-                    <p>
-                        <%= post.content.replaceAll("\r", "").replaceAll("\n", "").substring(0, 1024) + ((post.content.replaceAll("\r", "").replaceAll("\n", "<br>").length > 512) ? " [...]" : "") %>
-                    </p>
-                    <a href="#" <%- `onclick="confirmDelete(${index}, 'post', 'posts')"` %>>Delete</a>
-                    <a href="/posts/<%= index %>/edit">Edit</a>
+        <% posts.forEach((post, index) => { %>
+            <article class="preview post">
+                <h3><q><%= post.title %></q></h3>
+
+                <p><%= post.content.replaceAll("\r", "" ).replaceAll("\n", "" ) %></p>
+
+                <section class="admin-tools">
                     <a href="/posts/<%= index %>">View</a>
-                </div>
-            <% }); %>
-        </div>
+                    <a href="/posts/<%= index %>/edit">Edit</a>
+                    <a href="#" <%- `onclick="confirmDelete(${index}, 'post', 'posts')" ` %>>Delete</a>
+                </section>
+            </article>
+            <% if (index + 1 != posts.length) { // last post shouldn't have the hr %>
+                <hr class="border-dashed">
+            <% } %>
+        <% }); %>
     <% } %>
-</div>
-<div class="container-child">
-    <div class="container-child-child">
-        <h3 class="center">All categories</h3>
-        <% if (!categories.length) { %>
-        <p class="message">
-            No categories.
-        </p>
+</section>
+<hr>
+<section>
+    <h3 class="center">All categories</h3>
+    <% if (!categories.length) { %>
+        <p>No categories.</p>
     <% } else { %>
-        <div class="categories-index">
-            <% categories.forEach((category, index) => { %>
-                <div class="category">
-                    <h3>
-                        <q><%= category.name %></q>
-                    </h3>
-                    <p>
-                        ID: <%= category.id %>
-                    </p>
-                    <a href="#" <%- `onclick="confirmDelete(${index}, 'category', 'categories')"` %>>Delete</a>
-                    <a href="/categories/<%= index %>/edit">Edit</a>
+        <% categories.forEach((category, index)=> { %>
+            <article class="preview post">
+                <h3><q><%= category.name %></q></h3>
+
+                <p>ID: <%= category.id %></p>
+
+                <section class="admin-tools">
                     <a href="/categories/<%= index %>">View</a>
-                </div>
-            <% }); %>
-        </div>
+                    <a href="/categories/<%= index %>/edit">Edit</a>
+                    <a href="#" <%- `onclick="confirmDelete(${index}, 'category', 'categories')" ` %>>Delete</a>
+                </section>
+            </article>
+            <% if (index + 1 != categories.length) { // last category shouldn't have the hr %>
+                <hr class="border-dashed">
+            <% } %>
+        <% }); %>
     <% } %>
-    </div>
-    <div class="container-child-child">
-        <h3 class="center">All users</h3>
-        <% if (!users.length) { %>
-        <p class="message">
-            No users.
-        </p>
+</section>
+<hr>
+<section>
+    <h3 class="center">All users</h3>
+    <% if (!users.length) { %>
+        <p>No users.</p>
     <% } else { %>
-        <div class="users-index">
-            <% users.forEach((user, index) => { %>
-                <div class="user">
-                    <h3>
-                        <q><%= user.username %></q>
-                    </h3>
-                    <p>
-                        ID: <%= index %>
-                        <br>
-                        Role: <%= (user.isAdmin) ? "Administrator" : "User" %>
-                    </p>
-                    <a href="#" <%- `onclick="confirmDelete(${index}, 'user', 'users')"` %>>Delete</a>
-                    <a href="/users/<%= index %>/edit">Edit</a>
+        <% users.forEach((user, index) => { %>
+            <article class="preview post">
+                <h3><q><%= user.username %></q></h3>
+
+                <p>
+                    ID: <%= index %>
+                    <br>
+                    Role: <%= (user.isAdmin) ? "Administrator" : "User" %>
+                </p>
+
+                <section class="admin-tools">
                     <a href="/users/<%= index %>">View</a>
-                </div>
-            <% }); %>
-        </div>
+                    <a href="/users/<%= index %>/edit">Edit</a>
+                    <a href="#" <%- `onclick="confirmDelete(${index}, 'user', 'users')" ` %>>Delete</a>
+                </section>
+            </article>
+            <% if (index + 1 != users.length) { // last user shouldn't have the hr %>
+                <hr class="border-dashed">
+            <% } %>
+        <% }); %>
     <% } %>
-    </div>
-</div>
+</section>
 </div>
 <script src="/scripts/utils.js" defer></script>

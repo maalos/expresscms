@@ -1,0 +1,19 @@
+<% if (!users.length) { %>
+    <p>
+        No users.
+    </p>
+<% } else { %>
+    <% users.forEach((user, index) => { %>
+        <article class="preview user" onclick="location.href='/users/<%= index %>'">
+            <h3>
+                <a href="/users/<%= index %>"><q><%= user.username %></q></a>
+            </h3>
+            <p>
+                ID: <%= index %>
+            </p>
+        </article>
+        <% if (index + 1 != users.length) { // last user shouldn't have the hr %>
+            <hr class="border-dashed">
+        <% } %>
+    <% }); %>
+<% } %>

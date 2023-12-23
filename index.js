@@ -18,19 +18,18 @@ app.use(express.static("public"));
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-function isAuthorized(req, res, next) {
+function isAdmin(req, res, next) {
     const user = req.session && req.session.user;
 
     if (user && users.some(u => u.username === user.username && u.isAdmin))
         return next();
 
     res.render('generic', {
-        breadcrumbs: ``,
-        logintext: ``,
-        dashboardtext: ``,
+        breadcrumbs: generateBreadcrumbs(req),
+        logintext: generateLoginText(req),
+        dashboardtext: (req.session.user && (req.session.user.isAdmin == true || req.session.user.isAdmin == "true") ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``),
 
         pageTitle: 'Error',
-        pageCategory: 'Error',
         contentModule: 'error',
         
         errorCode: "401",
@@ -83,16 +82,24 @@ function generateLoginText(req) {
     const user = req.session.user;
 
     if (user)
-        return `<a href="/logout" id="logout"> ${user.username} (Log out)</a>`;
+        return `<a href="/logout" id="username-link">${user.username}</a>`;
 
-    return `<a href="/login" id="logout">Guest (Log in)</a>`;
+    return `<a href="/login" id="username-link">Log in</a>`;
 }
 
-require("./routes/general")(app, isAuthorized, categories, posts, users, sha256, generateBreadcrumbs, generateLoginText);
-require("./routes/posts")(app, fs, isAuthorized, categories, posts, generateBreadcrumbs, generateLoginText);
-require("./routes/users")(app, fs, isAuthorized, users, sha256, generateBreadcrumbs, generateLoginText);
-require("./routes/media")(app, fs, isAuthorized, upload, exec, sizeOf);
-require("./routes/categories")(app, fs, isAuthorized, categories, posts, generateBreadcrumbs, generateLoginText);
+function generateNav(req) {
+    return {
+        breadcrumbs: generateBreadcrumbs(req),
+        logintext: generateLoginText(req),
+        dashboardtext: req.session.user && req.session.user.isAdmin.toString() == "true" ? `<a href="/dashboard" id="dashboard">Dashboard</a>` : ``,
+    }
+}
+
+require("./routes/general")(app, isAdmin, categories, posts, users, sha256, generateNav);
+require("./routes/posts")(app, fs, isAdmin, categories, posts, users, generateNav);
+require("./routes/users")(app, fs, isAdmin, users, posts, sha256, generateNav);
+require("./routes/media")(app, fs, isAdmin, upload, exec, sizeOf);
+require("./routes/categories")(app, fs, isAdmin, categories, posts, generateNav);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

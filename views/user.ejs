@@ -1,0 +1,16 @@
+<h3>
+    <q><%= user.username %></q>
+</h3>
+<p>
+    ID: <%= userId %>
+</p>
+<h4>Posts:</h4>
+<% if (posts.some(post => post.author == user.username)) { %>
+    <ul>
+        <% posts.forEach((post, index) => { if (post.author == user.username) { %>
+            <li><a href="/posts/<%= index %>"><%= post.title %></a></li>
+        <% }}) %>
+    </ul>
+<% } else { %>
+    <p>No posts.</p>
+<% } %>
