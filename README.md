@@ -9,10 +9,11 @@ ExpressCMS is a lightweight, fast, minimal and secure Content Management System 
 - automatic WebP conversion for images
 
 ## Installation
-`git clone https://github.com/maalos/expresscms`
-`cd expresscms && npm i`
+`git clone https://github.com/maalos/expresscms && cd expresscms && npm i`
 ### Starting the server
-`node .`
+`node .`  
+or  
+`pm2 start index.js --name "ExpressCMS"`  
 
 ## TODO
 - template theming support 
